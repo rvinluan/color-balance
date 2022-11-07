@@ -1,5 +1,9 @@
 import { Sprite } from "./sprite.js";
+import Player from './game/player.js'
+
 const {GamepadListener, gamepad } = require("gamepad.js");
+
+const PLAYER_COUNT = 4
 
 //setup
 var w = document.querySelector(".main").offsetWidth;
@@ -48,85 +52,89 @@ var level = 1;
 const movementSpeed = 5;
 const maxVelocity = 5;
 
+
 //player variables
-var players = [
-  {
-    active: true,
-    x: 0,
-    y: h / 2 - 12,
-    vx: 0,
-    vy: 0,
-    brushImage: brushImgs[0],
-    isDrawing: false,
-    color: colors[0],
-    keyUp: "w",
-    keyDown: "s",
-    keyLeft: "a",
-    keyRight: "d",
-    keyButton1: "q", //draw, ok
-    keyButton2: "e", //switch color, cancel
-    facing: "down",
-    isMoving: false,
-    bop: "up",
-  },
-  {
-    active: false,
-    x: w / 4,
-    y: h / 2 - 12,
-    vx: 0,
-    vy: 0,
-    brushImage: brushImgs[1],
-    isDrawing: false,
-    color: colors[1],
-    keyUp: "i",
-    keyDown: "k",
-    keyLeft: "j",
-    keyRight: "l",
-    keyButton1: "u", //draw, ok
-    keyButton2: "o", //switch color, cancel
-    facing: "down",
-    isMoving: false,
-    bop: "up",
-  },
-  {
-    active: false,
-    x: w / 2,
-    y: h / 2 - 12,
-    vx: 0,
-    vy: 0,
-    brushImage: brushImgs[2],
-    isDrawing: false,
-    color: colors[2],
-    keyUp: "z",
-    keyDown: "x",
-    keyLeft: "c",
-    keyRight: "v",
-    keyButton1: "b", //draw, ok
-    keyButton2: "e", //switch color, cancel
-    facing: "down",
-    isMoving: false,
-    bop: "up",
-  },
-  {
-    active: false,
-    x: w / 2 + w / 4,
-    y: h / 2 - 12,
-    vx: 0,
-    vy: 0,
-    brushImage: brushImgs[3],
-    isDrawing: false,
-    color: colors[3],
-    keyUp: "9",
-    keyDown: "0",
-    keyLeft: "-",
-    keyRight: "=",
-    keyButton1: "8", //draw, ok
-    keyButton2: "e", //switch color, cancel
-    facing: "down",
-    isMoving: false,
-    bop: "up",
-  },
-];
+const players = []
+
+
+// var players = [
+//   {
+//     active: true,
+//     x: 0,
+//     y: h / 2 - 12,
+//     vx: 0,
+//     vy: 0,
+//     brushImage: brushImgs[0],
+//     isDrawing: false,
+//     color: colors[0],
+//     keyUp: "w",
+//     keyDown: "s",
+//     keyLeft: "a",
+//     keyRight: "d",
+//     keyButton1: "q", //draw, ok
+//     keyButton2: "e", //switch color, cancel
+//     facing: "down",
+//     isMoving: false,
+//     bop: "up",
+//   },
+//   {
+//     active: false,
+//     x: w / 4,
+//     y: h / 2 - 12,
+//     vx: 0,
+//     vy: 0,
+//     brushImage: brushImgs[1],
+//     isDrawing: false,
+//     color: colors[1],
+//     keyUp: "i",
+//     keyDown: "k",
+//     keyLeft: "j",
+//     keyRight: "l",
+//     keyButton1: "u", //draw, ok
+//     keyButton2: "o", //switch color, cancel
+//     facing: "down",
+//     isMoving: false,
+//     bop: "up",
+//   },
+//   {
+//     active: false,
+//     x: w / 2,
+//     y: h / 2 - 12,
+//     vx: 0,
+//     vy: 0,
+//     brushImage: brushImgs[2],
+//     isDrawing: false,
+//     color: colors[2],
+//     keyUp: "z",
+//     keyDown: "x",
+//     keyLeft: "c",
+//     keyRight: "v",
+//     keyButton1: "b", //draw, ok
+//     keyButton2: "e", //switch color, cancel
+//     facing: "down",
+//     isMoving: false,
+//     bop: "up",
+//   },
+//   {
+//     active: false,
+//     x: w / 2 + w / 4,
+//     y: h / 2 - 12,
+//     vx: 0,
+//     vy: 0,
+//     brushImage: brushImgs[3],
+//     isDrawing: false,
+//     color: colors[3],
+//     keyUp: "9",
+//     keyDown: "0",
+//     keyLeft: "-",
+//     keyRight: "=",
+//     keyButton1: "8", //draw, ok
+//     keyButton2: "e", //switch color, cancel
+//     facing: "down",
+//     isMoving: false,
+//     bop: "up",
+//   },
+// ];
 
 function makeColoredBrushImage(imgSrc, color) {
   // console.log(imgSrc);
@@ -318,10 +326,16 @@ function matchAnimation() {
 
 function startGame() {
   scene = scenes.GAME;
-  players[0].active = true;
-  players[1].active = true;
-  players[2].active = true;
-  players[3].active = true;
+
+  for (let i=0; i < PLAYER_COUNT; i++) {
+    players.push(new Player(w, h, brushImgs[i], i))
+  }
+
+  players.forEach(player => player.active = true)
+  // players[0].active = true;
+  // players[1].active = true;
+  // players[2].active = true;
+  // players[3].active = true;
   for (var i = 0; i < brushImgs.length; i++) {
     makeColoredBrushImage(brushImgs[i], colors[i]);
   }
@@ -338,31 +352,38 @@ function endGame() {
   document.querySelector(".final-image").src = imgData;
 }
 
-// const gamepadListener = new GamepadListener();
-// gamepadListener.start();
-// gamepadListener.on('gamepad:connected', function(event) {
-//   console.log(event)
-// })
-
-// gamepadListener.on('gamepad:0:button', function(event) {
-//   if (scene = scenes.SPLASH) {
-//     startGame()
-//   }
-// })
-
-window.addEventListener("gamepadconnected", function(e) {
-  console.log(`GAMEPAD CONNECT`);
-  gamePads[0] = navigator.getGamepads()[e.gamepad.index];
-  console.log("A "+ gamePads[0].id + " was successfully detected!")
-
-  setInterval(function() {
-    gamePads[0].buttons.forEach((button, i) => {
-      if (scene == scenes.SPLASH && button.pressed) {
-        startGame()
-      }
-    })
-  }, 100)
+const gamepadListener = new GamepadListener();
+gamepadListener.start();
+gamepadListener.on('gamepad:connected', function(event) {
+  console.log(event)
 })
+
+let gameStarted = false
+
+gamepadListener.on('gamepad:0:button', function(event) {
+  console.log(`BUTTONED`);
+  if (scene == scenes.SPLASH && !gameStarted) {
+  
+    console.log(`SPLASH -> GAME`);
+    startGame()
+    gameStarted = true
+  }
+})
+
+// window.addEventListener("gamepadconnected", function(e) {
+//   console.log(`GAMEPAD CONNECT`);
+//   gamePads[0] = navigator.getGamepads()[e.gamepad.index];
+//   console.log("A "+ gamePads[0].id + " was successfully detected!")
+//   console.log(gamePads[0]) // 
+
+//   setInterval(function() {
+//     gamePads[0].buttons.forEach((button, i) => {
+//       if (scene == scenes.SPLASH && button.pressed) {
+//         startGame()
+//       }
+//     })
+//   }, 100)
+// })
 
 function handleKeyDown(key, playerObject) {
   switch (key) {
