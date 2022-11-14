@@ -1,4 +1,4 @@
-import { Sprite } from "./sprite.js";
+import { Sprite } from "./game/sprite.js";
 import Player from './game/player.js'
 
 const {GamepadListener, gamepad } = require("gamepad.js");
@@ -222,6 +222,7 @@ function endGame() {
   document.querySelector(".score").innerHTML = level;
   var imgData = c.toDataURL("image/png");
   document.querySelector(".final-image").src = imgData;
+  gameStarted = false;
 }
 
 const gamepadListener = new GamepadListener();

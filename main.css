@@ -1,6 +1,6 @@
 @font-face {
   font-family: "Roundabout";
-  src: url("./ChevyRayRoundabout.ttf") format("truetype");
+  src: url("./assets/ChevyRayRoundabout.ttf") format("truetype");
 }
 
 html {
@@ -35,7 +35,7 @@ canvas {
 }
 
 #canvas {
-  cursor: url(cursor.png), auto;
+  cursor: url("./assets/cursor.png"), auto;
 }
 
 #ui-canvas {
@@ -56,7 +56,7 @@ canvas {
 }
 
 .start-screen {
-  background-image: url(rainbows.svg);
+  background-image: url("assets/rainbows.svg");
   background-size: contain;
   background-position-y: center - 8px;
 }
