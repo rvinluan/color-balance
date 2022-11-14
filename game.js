@@ -1,5 +1,8 @@
 import { Sprite } from "./game/sprite.js";
 import Player from './game/player.js'
+import State from './game/state.js'
+
+const state = new State();
 
 const {GamepadListener, gamepad } = require("gamepad.js");
 
@@ -9,7 +12,6 @@ const PLAYER_COUNT = 4
 var w = document.querySelector(".main").offsetWidth;
 var h = 300;
 var currentPs = [];
-var goalPs = [];
 
 var scenes = {SPLASH: "splash", GAME: "game", END: "end"};
 var scene = scenes.SPLASH;
@@ -93,24 +95,6 @@ function tick() {
   }
 }
 
-function generateRandomGoals() {
-  var g = [];
-  for (var i = 0; i < 3; i++) {
-    g.push(Math.floor(Math.random() * 92));
-  }
-  g.sort((a, b) => a - b);
-  g.push(92);
-  g.unshift(0);
-  var goals = [];
-  for (var i = 0; i < g.length - 1; i++) {
-    goals.push(g[i + 1] - g[i]);
-  }
-  goals = goals.map((e) => e + 2);
-
-  //set widths of things
-  adjustBars("goal", goals);
-  return goals;
-}
 
 function hexToDecimal(colorString, start) {
   var hex = colorString.substring(start, start + 2);
@@ -150,14 +134,7 @@ function checkPercentage() {
     }
   }
   currentPs = counts.map((x) => (x / (w * h)) * 100);
-  adjustBars("current", currentPs);
-}
-
-function adjustBars(which, amountsArray) {
-  for (var i = 0; i < amountsArray.length; i++) {
-    var cn = "." + which + " .indicator" + (i + 1);
-    document.querySelector(cn).style.width = amountsArray[i] + "%";
-  }
+  state.adjustBars("current", currentPs);
 }
 
 function checkForWin() {
@@ -165,7 +142,7 @@ function checkForWin() {
   var offBy = 0;
   for (var i = 0; i < 4; i++) {
     var tolerance = 5;
-    let diff = Math.abs(currentPs[i] - goalPs[i]);
+    let diff = Math.abs(currentPs[i] - state.goalPs[i]);
     offBy += diff;
     if (diff > tolerance) {
       allWithin = false;
@@ -175,7 +152,6 @@ function checkForWin() {
     console.log("off by: " + offBy);
     matchAnimation();
     levelUp();
-    goalPs = generateRandomGoals();
   }
 }
 
@@ -318,7 +294,6 @@ ctx.fillStyle = "#2d2d2d";
 ctx.fillRect(0, 0, w, h);
 // drawCorners();
 drawQuadrants();
-goalPs = generateRandomGoals();
 setInterval(checkPercentage, 300);
 
 function drawPaint() {
