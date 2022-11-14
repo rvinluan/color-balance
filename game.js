@@ -8,11 +8,8 @@ const PLAYER_COUNT = 4
 //setup
 var w = document.querySelector(".main").offsetWidth;
 var h = 300;
-var bSize = 30;
 var currentPs = [];
 var goalPs = [];
-
-var gamePads = [];
 
 var scenes = {SPLASH: "splash", GAME: "game", END: "end"};
 var scene = scenes.SPLASH;
@@ -40,10 +37,8 @@ uc.height = h;
 
 //colors
 var colors = ["#ffffff", "#3d1591", "#F7C924", "#F96C6C"];
-var currentColor = colors[0];
 
 //state
-var isMouseDown = false;
 var timer = 0;
 var timerTick;
 var level = 1;
@@ -56,88 +51,7 @@ const maxVelocity = 5;
 //player variables
 const players = []
 
-
-// var players = [
-//   {
-//     active: true,
-//     x: 0,
-//     y: h / 2 - 12,
-//     vx: 0,
-//     vy: 0,
-//     brushImage: brushImgs[0],
-//     isDrawing: false,
-//     color: colors[0],
-//     keyUp: "w",
-//     keyDown: "s",
-//     keyLeft: "a",
-//     keyRight: "d",
-//     keyButton1: "q", //draw, ok
-//     keyButton2: "e", //switch color, cancel
-//     facing: "down",
-//     isMoving: false,
-//     bop: "up",
-//   },
-//   {
-//     active: false,
-//     x: w / 4,
-//     y: h / 2 - 12,
-//     vx: 0,
-//     vy: 0,
-//     brushImage: brushImgs[1],
-//     isDrawing: false,
-//     color: colors[1],
-//     keyUp: "i",
-//     keyDown: "k",
-//     keyLeft: "j",
-//     keyRight: "l",
-//     keyButton1: "u", //draw, ok
-//     keyButton2: "o", //switch color, cancel
-//     facing: "down",
-//     isMoving: false,
-//     bop: "up",
-//   },
-//   {
-//     active: false,
-//     x: w / 2,
-//     y: h / 2 - 12,
-//     vx: 0,
-//     vy: 0,
-//     brushImage: brushImgs[2],
-//     isDrawing: false,
-//     color: colors[2],
-//     keyUp: "z",
-//     keyDown: "x",
-//     keyLeft: "c",
-//     keyRight: "v",
-//     keyButton1: "b", //draw, ok
-//     keyButton2: "e", //switch color, cancel
-//     facing: "down",
-//     isMoving: false,
-//     bop: "up",
-//   },
-//   {
-//     active: false,
-//     x: w / 2 + w / 4,
-//     y: h / 2 - 12,
-//     vx: 0,
-//     vy: 0,
-//     brushImage: brushImgs[3],
-//     isDrawing: false,
-//     color: colors[3],
-//     keyUp: "9",
-//     keyDown: "0",
-//     keyLeft: "-",
-//     keyRight: "=",
-//     keyButton1: "8", //draw, ok
-//     keyButton2: "e", //switch color, cancel
-//     facing: "down",
-//     isMoving: false,
-//     bop: "up",
-//   },
-// ];
-
 function makeColoredBrushImage(imgSrc, color) {
-  // console.log(imgSrc);
   var bw = imgSrc.width / 4;
   //create an offscreen canvas
   var offCanvas = document.createElement("CANVAS");
@@ -203,17 +117,6 @@ function hexToDecimal(colorString, start) {
   return parseInt(hex, 16);
 }
 
-function drawCorners() {
-  ctx.fillStyle = colors[0];
-  ctx.fillRect(0, 0, bSize, bSize);
-  ctx.fillStyle = colors[1];
-  ctx.fillRect(w - bSize, 0, bSize, bSize);
-  ctx.fillStyle = colors[2];
-  ctx.fillRect(0, h - bSize, bSize, bSize);
-  ctx.fillStyle = colors[3];
-  ctx.fillRect(w - bSize, h - bSize, bSize, bSize);
-}
-
 function drawQuadrants() {
   ctx.fillStyle = colors[0];
   ctx.fillRect(0, 0, w / 2, h / 2);
@@ -223,34 +126,6 @@ function drawQuadrants() {
   ctx.fillRect(0, h / 2, w / 2, h / 2);
   ctx.fillStyle = colors[3];
   ctx.fillRect(w / 2, h / 2, w / 2, h / 2);
-}
-
-function brush(x, y) {
-  var bs = bSize;
-  ctx.fillStyle = currentColor;
-  // ctx.beginPath();
-  // ctx.arc(x, y, 25, 0, Math.PI*2);
-  // ctx.fill();
-  ctx.save();
-  ctx.translate(x, y);
-  for (var i = 0; i < 500; i++) {
-    ctx.fillRect(
-      Math.floor(Math.random() * bs) - bs / 2,
-      Math.floor(Math.random() * bs) - bs / 2,
-      1,
-      1
-    );
-  }
-  ctx.restore();
-}
-
-function squareBrush(x, y) {
-  var bs = bSize;
-  ctx.fillStyle = currentColor;
-  ctx.save();
-  ctx.translate(x, y);
-  ctx.fillRect(-bs / 2, -bs / 2, bs, bs);
-  ctx.restore();
 }
 
 function imageBrush(x, y, brushImg, color) {
@@ -332,10 +207,7 @@ function startGame() {
   }
 
   players.forEach(player => player.active = true)
-  // players[0].active = true;
-  // players[1].active = true;
-  // players[2].active = true;
-  // players[3].active = true;
+
   for (var i = 0; i < brushImgs.length; i++) {
     makeColoredBrushImage(brushImgs[i], colors[i]);
   }
@@ -369,21 +241,6 @@ gamepadListener.on('gamepad:0:button', function(event) {
     gameStarted = true
   }
 })
-
-// window.addEventListener("gamepadconnected", function(e) {
-//   console.log(`GAMEPAD CONNECT`);
-//   gamePads[0] = navigator.getGamepads()[e.gamepad.index];
-//   console.log("A "+ gamePads[0].id + " was successfully detected!")
-//   console.log(gamePads[0]) // 
-
-//   setInterval(function() {
-//     gamePads[0].buttons.forEach((button, i) => {
-//       if (scene == scenes.SPLASH && button.pressed) {
-//         startGame()
-//       }
-//     })
-//   }, 100)
-// })
 
 function handleKeyDown(key, playerObject) {
   switch (key) {
