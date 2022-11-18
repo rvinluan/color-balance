@@ -16,7 +16,7 @@ var w = document.querySelector(".main").offsetWidth;
 var h = 300;
 var currentPs = [];
 
-var scenes = {SPLASH: "splash", GAME: "game", END: "end"};
+var scenes = {SPLASH: "splash", SELECT: "select", GAME: "game", END: "end"};
 var scene = scenes.SPLASH;
 
 var c = document.getElementById("canvas");
@@ -165,7 +165,6 @@ function levelUp() {
 
 function matchAnimation() {
   var wm = document.querySelector(".win-message");
-  var ms = document.querySelector(".match-screen");
   wm.classList.remove("hidden");
   wm.innerHTML = "Match!";
   // ms.classList.add("up");
@@ -177,7 +176,15 @@ function matchAnimation() {
   // }, 300)
 }
 
+function selectSettings() {
+  scene = scenes.SELECT;
+
+  document.querySelector(".select-screen").classList.remove("hidden");
+
+}
+
 function startGame() {
+  selectSettings();
   scene = scenes.GAME;
 
   for (let i=0; i < PLAYER_COUNT; i++) {
@@ -245,12 +252,6 @@ function handleKeyDown(key, playerObject) {
   }
 }
 
-document.addEventListener("keydown", function (e) {
-  for (var i = 0; i < players.length; i++) {
-    handleKeyDown(e.key, players[i]);
-  }
-});
-
 function handleKeyUp(key, playerObject) {
   playerObject.facing = "down";
   playerObject.isMoving = false;
@@ -285,6 +286,12 @@ document.addEventListener("keyup", function (e) {
     handleKeyUp(e.key, players[i]);
   }
 });
+
+document.addEventListener("keydown", function (e) {
+    for (var i = 0; i < players.length; i++) {
+      handleKeyDown(e.key, players[i]);
+    }
+  });
 
 document
   .querySelector(".start-screen .start-4p")
