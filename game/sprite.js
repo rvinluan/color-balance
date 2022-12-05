@@ -1,7 +1,6 @@
-const spriteWidth = 16;
-const spriteHeight = 16;
-const borderWidth = 1;
-const spacingWidth = 0;
+import * as constants from "./constants.js";
+
+const { SPRITE_WIDTH, SPRITE_HEIGHT, BORDER_WIDTH, SPACING_WIDTH } = constants;
 
 export class Sprite {
   spriteImage = "";
@@ -11,25 +10,9 @@ export class Sprite {
 
   spritePositionToImagePosition(row, col) {
     return {
-      x: borderWidth + row * (spacingWidth + spriteWidth),
-      y: borderWidth + col * (spacingWidth + spriteHeight),
+      x: BORDER_WIDTH + row * (SPACING_WIDTH + SPRITE_WIDTH),
+      y: BORDER_WIDTH + col * (SPACING_WIDTH + SPRITE_HEIGHT),
     };
-  }
-
-  drawSprite(canvasContext, player, playerIndex) {
-    let [row, col] = this.getSpritePosition(player, playerIndex);
-    const spritePosition = this.spritePositionToImagePosition(row, col);
-    canvasContext.drawImage(
-      this.spriteImage,
-      spritePosition.x,
-      spritePosition.y,
-      16,
-      16,
-      player.x + 16,
-      player.y + 16,
-      16,
-      16
-    );
   }
 
   getSpritePosition(player, playerIndex) {
@@ -54,10 +37,10 @@ export class Sprite {
   }
 
   bop(players) {
-    players.forEach(player => {
-      if(!player.isMoving) {
-        player.bop = player.bop == "up" ? "down" : "up"
+    players.forEach((player) => {
+      if (!player.isMoving) {
+        player.bop = player.bop == "up" ? "down" : "up";
       }
-    })
+    });
   }
 }

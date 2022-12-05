@@ -1,8 +1,11 @@
 import { Sprite } from "./game/sprite.js";
 import Player from './game/player.js'
 import State from './game/state.js'
+import constants from "./game/constants.js";
+
 
 const state = new State();
+var sprite = new Sprite(document.getElementById("character-sprite"));
 
 const {GamepadListener, gamepad } = require("gamepad.js");
 
@@ -30,7 +33,6 @@ var brushImgs = [
   document.getElementById("brush-sp"),
 ];
 var cursorImg = document.getElementById("cursor");
-var sprite = new Sprite(document.getElementById("character-sprite"));
 
 c.width = w;
 c.height = h;
@@ -310,6 +312,22 @@ function drawPaint() {
   requestAnimationFrame(drawPaint);
 }
 
+function drawSprite(canvasContext, player, playerIndex) {
+  const [row, col] = sprite.getSpritePosition(player, playerIndex);
+  const spritePosition = sprite.spritePositionToImagePosition(row, col);
+  canvasContext.drawImage(
+    sprite.spriteImage,
+    spritePosition.x,
+    spritePosition.y,
+    16,
+    16,
+    player.x + 16,
+    player.y + 16,
+    16,
+    16
+  );
+}
+
 function drawCursors() {
   uctx.clearRect(0, 0, w, h);
   for (var i = 0; i < players.length; i++) {
@@ -325,7 +343,7 @@ function drawCursors() {
       players[i].x += players[i].vx;
       players[i].y += players[i].vy;
       uctx.drawImage(cursorImg, players[i].x, players[i].y, 25, 25);
-      sprite.drawSprite(uctx, players[i], i);
+      drawSprite(uctx, players[i], i);
     }
   }
   requestAnimationFrame(drawCursors);
