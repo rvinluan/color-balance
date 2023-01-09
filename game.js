@@ -178,14 +178,18 @@ function matchAnimation() {
 
 function selectSettings() {
   scene = scenes.SELECT;
-
   document.querySelector(".select-screen").classList.remove("hidden");
 
 }
 
-function startGame() {
+function startSelect() {
   selectSettings();
-  scene = scenes.GAME;
+  selectStarted = true;
+}
+
+function startGame() {
+  document.querySelector(".select-screen").classList.add("hidden");
+  document.querySelector(".main").classList.remove("hidden");
 
   for (let i=0; i < PLAYER_COUNT; i++) {
     players.push(new Player(w, h, brushImgs[i], i))
@@ -216,17 +220,30 @@ gamepadListener.on('gamepad:connected', function(event) {
   console.log(event)
 })
 
-let gameStarted = false
+let gameStarted = false;
+let selectStarted = false;
+let pressedButton = null;
 
-gamepadListener.on('gamepad:0:button', function(event) {
-  console.log(`BUTTONED`);
-  if (scene == scenes.SPLASH && !gameStarted) {
-  
-    console.log(`SPLASH -> GAME`);
-    startGame()
-    gameStarted = true
+gamepadListener.on("gamepad:0:button", function (event) {
+  console.log(`selectStarted: ${selectStarted}`);
+  console.log(`gameStarted: ${gameStarted}`);
+
+  if (pressedButton === null && event.detail.pressed) {
+    pressedButton = event.detail.button
   }
-})
+
+  if (pressedButton !== null && !event.detail.pressed) {
+    if (scene == scenes.SPLASH && !gameStarted) {
+      console.log(`SPLASH -> SELECT`);
+      startSelect();
+    } else if (scene == scenes.SELECT && !gameStarted) {
+      console.log(`SELECT -> GAME`);
+      startGame();
+      gameStarted = true;
+    }
+    pressedButton = null;
+  }
+});
 
 function handleKeyDown(key, playerObject) {
   switch (key) {

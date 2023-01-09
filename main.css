@@ -99,6 +99,7 @@ canvas {
 }
 
 .start-screen.hidden,
+.main.hidden,
 .select-screen.hidden,
 .end-screen.hidden {
   top: 120vh;
