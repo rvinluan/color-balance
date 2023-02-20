@@ -188,6 +188,7 @@ function startSelect() {
 }
 
 function startGame() {
+  console.log(`!!! - startGame() called`);
   document.querySelector(".select-screen").classList.add("hidden");
   document.querySelector(".main").classList.remove("hidden");
 
@@ -195,6 +196,8 @@ function startGame() {
     players.push(new Player(w, h, brushImgs[i], i))
   }
 
+  console.log(`player objects:`);
+  console.log(players);
   players.forEach(player => player.active = true)
 
   for (var i = 0; i < brushImgs.length; i++) {
@@ -202,6 +205,8 @@ function startGame() {
   }
   document.querySelector(".start-screen").classList.add("hidden");
   timerTick = setInterval(tick, 1000);
+  console.log(`sprite objects`);
+  console.log(sprite);
   console.log("! - " + sprite.spritePositionToImagePosition(1, 0).x);
   console.log("! - " + sprite.spritePositionToImagePosition(1, 0).y);
 }
@@ -225,8 +230,6 @@ let selectStarted = false;
 let pressedButton = null;
 
 gamepadListener.on("gamepad:0:button", function (event) {
-  console.log(`selectStarted: ${selectStarted}`);
-  console.log(`gameStarted: ${gameStarted}`);
 
   if (pressedButton === null && event.detail.pressed) {
     pressedButton = event.detail.button
@@ -367,6 +370,7 @@ function drawCursors() {
       players[i].x += players[i].vx;
       players[i].y += players[i].vy;
       uctx.drawImage(cursorImg, players[i].x, players[i].y, 25, 25);
+      debugger;
       drawSprite(uctx, players[i], i);
     }
   }

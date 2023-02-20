@@ -1,4 +1,10 @@
-import * as constants from "./constants.js";
+const constants = {
+  SPRITE_WIDTH: 16,
+  SPRITE_HEIGHT: 16,
+  BORDER_WIDTH: 1,
+  SPACING_WIDTH: 0,
+  PLAYER_COUNT: 4,
+}
 
 const { SPRITE_WIDTH, SPRITE_HEIGHT, BORDER_WIDTH, SPACING_WIDTH } = constants;
 
