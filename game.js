@@ -1,7 +1,6 @@
 import { Sprite } from "./game/sprite.js";
 import Player from './game/player.js'
 import State from './game/state.js'
-import constants from "./game/constants.js";
 
 
 const state = new State();
@@ -191,6 +190,7 @@ function startGame() {
   console.log(`!!! - startGame() called`);
   document.querySelector(".select-screen").classList.add("hidden");
   document.querySelector(".main").classList.remove("hidden");
+  scene = scenes.GAME;
 
   for (let i=0; i < PLAYER_COUNT; i++) {
     players.push(new Player(w, h, brushImgs[i], i))
@@ -234,7 +234,6 @@ gamepadListener.on("gamepad:0:button", function (event) {
   if (pressedButton === null && event.detail.pressed) {
     pressedButton = event.detail.button
   }
-
   if (pressedButton !== null && !event.detail.pressed) {
     if (scene == scenes.SPLASH && !gameStarted) {
       console.log(`SPLASH -> SELECT`);
@@ -244,7 +243,46 @@ gamepadListener.on("gamepad:0:button", function (event) {
       startGame();
       gameStarted = true;
     }
+    else {
+      handleKeyDown(pressedButton, players[0])
+    }
     pressedButton = null;
+  }
+});
+
+gamepadListener.on("gamepad:0:axis", function (event) {
+  if (scene !== scenes.GAME) return;
+  const gamepadIndex = event.detail.gamepad?.index || 0
+  // debugger;
+  const playerObject = players[gamepadIndex]
+
+  // axis released
+  if (Math.abs(event.detail.value) < 1) {
+    console.log(`RELEASE!`);
+    playerObject.facing = "down";
+    playerObject.isMoving = false;
+    playerObject.vy = 0
+    playerObject.vx = 0
+    checkForWin();
+    return;
+  }
+  else
+  // axis pressed
+  {
+    console.log(`PRESSED!`);
+    if (event.detail.axis == 1 && event.detail.value == -1) {
+      playerObject.facing = "up"
+      playerObject.vy -= movementSpeed;
+    } else if (event.detail.axis == 0 && event.detail.value == -1) {
+      playerObject.facing = "left"
+      playerObject.vx -= movementSpeed;
+    } else if (event.detail.axis == 1 && event.detail.value == 1) {
+      playerObject.facing = "down"
+      playerObject.vy += movementSpeed;
+    } else if (event.detail.axis == 0 && event.detail.value == 1) {
+      playerObject.facing = "right"
+      playerObject.vx += movementSpeed;
+    }
   }
 });
 
@@ -321,7 +359,6 @@ document
 
 ctx.fillStyle = "#2d2d2d";
 ctx.fillRect(0, 0, w, h);
-// drawCorners();
 drawQuadrants();
 setInterval(checkPercentage, 300);
 
