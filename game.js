@@ -370,7 +370,6 @@ function drawCursors() {
       players[i].x += players[i].vx;
       players[i].y += players[i].vy;
       uctx.drawImage(cursorImg, players[i].x, players[i].y, 25, 25);
-      debugger;
       drawSprite(uctx, players[i], i);
     }
   }
