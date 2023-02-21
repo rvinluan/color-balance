@@ -258,7 +258,6 @@ gamepadListener.on("gamepad:0:axis", function (event) {
 
   // axis released
   if (Math.abs(event.detail.value) < 1) {
-    console.log(`RELEASE!`);
     playerObject.facing = "down";
     playerObject.isMoving = false;
     playerObject.vy = 0
@@ -269,7 +268,6 @@ gamepadListener.on("gamepad:0:axis", function (event) {
   else
   // axis pressed
   {
-    console.log(`PRESSED!`);
     if (event.detail.axis == 1 && event.detail.value == -1) {
       playerObject.facing = "up"
       playerObject.vy -= movementSpeed;
