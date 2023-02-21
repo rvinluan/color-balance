@@ -47,7 +47,7 @@ var timerTick;
 var level = 1;
 
 //constants
-const movementSpeed = 5;
+const movementSpeed = 2.5;
 const maxVelocity = 5;
 
 
@@ -230,9 +230,11 @@ let selectStarted = false;
 let pressedButton = null;
 
 gamepadListener.on("gamepad:0:button", function (event) {
-
   if (pressedButton === null && event.detail.pressed) {
     pressedButton = event.detail.button
+    if (scene === scenes.GAME) {
+      handleButtonDown(pressedButton, players[0])
+    }
   }
   if (pressedButton !== null && !event.detail.pressed) {
     if (scene == scenes.SPLASH && !gameStarted) {
@@ -244,7 +246,7 @@ gamepadListener.on("gamepad:0:button", function (event) {
       gameStarted = true;
     }
     else {
-      handleKeyDown(pressedButton, players[0])
+      handleButtonUp(pressedButton, players[0])
     }
     pressedButton = null;
   }
@@ -283,6 +285,18 @@ gamepadListener.on("gamepad:0:axis", function (event) {
     }
   }
 });
+
+function handleButtonDown(button, playerObject = null) {
+  console.log(`Button pressed`);
+  console.log(button);
+  if (playerObject) playerObject.isDrawing = true;
+}
+
+function handleButtonUp(button, playerObject = null) {
+  console.log(`Button released`);
+  console.log(button);
+  if (playerObject) playerObject.isDrawing = false;
+}
 
 function handleKeyDown(key, playerObject) {
   switch (key) {
