@@ -229,11 +229,11 @@ let gameStarted = false;
 let selectStarted = false;
 let pressedButton = null;
 
-gamepadListener.on("gamepad:0:button", function (event) {
+gamepadListener.on("gamepad:button", function (event) {
   if (pressedButton === null && event.detail.pressed) {
     pressedButton = event.detail.button
     if (scene === scenes.GAME) {
-      handleButtonDown(pressedButton, players[0])
+      handleButtonDown(pressedButton, players[event.detail.index])
     }
   }
   if (pressedButton !== null && !event.detail.pressed) {
@@ -246,13 +246,13 @@ gamepadListener.on("gamepad:0:button", function (event) {
       gameStarted = true;
     }
     else {
-      handleButtonUp(pressedButton, players[0])
+      handleButtonUp(pressedButton, players[event.detail.index])
     }
     pressedButton = null;
   }
 });
 
-gamepadListener.on("gamepad:0:axis", function (event) {
+gamepadListener.on("gamepad:axis", function (event) {
   if (scene !== scenes.GAME) return;
   const gamepadIndex = event.detail.gamepad?.index || 0
   // debugger;
