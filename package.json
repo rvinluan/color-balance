@@ -1,0 +1,25 @@
+{
+  "name": "color-balance",
+  "version": "1.0.0",
+  "description": "Paint on the canvas and balance the 4 colors in the palette as many times as you can before time runs out. The ratio of colors is shown in the bar above the canvas; match the ratios of the 4 colors as shown in the top bar to score 1 point.",
+  "main": "main.js",
+  "dependencies": {
+    "electron": "^21.1.0",
+    "gamepad.js": "^1.0.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rvinluan/color-balance.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rvinluan/color-balance/issues"
+  },
+  "homepage": "https://github.com/rvinluan/color-balance#readme"
+}

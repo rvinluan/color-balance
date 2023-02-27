@@ -9,13 +9,22 @@
         <link rel="stylesheet" href="main.css">
     </head>
     <body>
+      <!-- start screen -->
       <div class="start-screen">
         <div class="start-screen-content">
-          <h1>Color<br>Balance</h1>
-          <button>Start!</button>
+          <h1>color<br>balance</h1>
+          <h3 class="start-4p">PRESS ANY BUTTON</h3>
+          <h4 class="splash-byline">by @_rvgames</h4>
         </div>
       </div>
-      <div class="main">
+      <!-- select screen -->
+      <div class="select-screen hidden">
+        <div class="select-screen-content">
+          <h2>press a button to join</h2>
+        </div>
+      </div>
+      <!-- game screen -->
+      <div class="main hidden">
         <div class="metadata-area">
           <div class="col">
           <p>Level</p>
@@ -23,12 +32,11 @@
           </div>
           <div class="col">
           <p>Time Remaining</p>
-          <p class="time-remaining">120s</p>
+          <p class="time-remaining">60s</p>
           </div>
         </div>
         <div class="indicator-area">
         <div class="bars goal">
-          <!-- <div class="match-screen"></div> -->
           <div class="indicator1"></div>
           <div class="indicator2"></div>
           <div class="indicator3"></div>
@@ -48,7 +56,10 @@
           <div class="indicator4"></div>
         </div>
         </div>
-        <canvas id="canvas"></canvas>
+        <div class="canvas-container">
+          <canvas id="canvas"></canvas>
+          <canvas id="ui-canvas"></canvas>
+        </div>
         <p class="win-message hidden">Match!</p>
         <div class="keyboard-controls">
           <p>A</p>
@@ -57,6 +68,7 @@
           <p>F</p>
         </div>
       </div>
+      <!-- end screen -->
       <div class="end-screen hidden">
         <div class="end-screen-content">
           <h2>Game Over!</h2>
@@ -66,9 +78,15 @@
         </div>
       </div>
       <div id="brushes">
-        <img id="brush-sq" src="brush-square.png">
-        <img id="brush-sl" src="brush-slash.png">
+        <img preload id="cursor" src="assets/cursor.png">
+        <img preload id="brush-sq" src="assets/brush-square.png">
+        <img preload id="brush-sl" src="assets/brush-slash.png">
+        <img preload id="brush-st" src="assets/brush-star.png">
+        <img preload id="brush-sp" src="assets/brush-spray.png">
       </div>
-      <script src="main.js"></script>
+      <div id="sprite">
+        <img preload id="character-sprite" src="assets/character-sprite.png">
+      </div>
+      <script type="module" src="game.js"></script>
     </body>
 </html>
